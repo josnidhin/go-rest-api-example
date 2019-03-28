@@ -4,21 +4,21 @@
 package config
 
 type Config struct {
-	Log *LogConfig `json: log`
+	Log *LogConfig `json:"log"`
 
-	Server *ServerConfig `json: server`
+	Server *ServerConfig `json:"server"`
 }
 
 type LogConfig struct {
-	Level string `json: level`
+	Level string `json:"level"`
 }
 
 type ServerConfig struct {
-	HTTP *HTTPServerConfig `json: http`
+	HTTP *HTTPServerConfig `json:"http"`
 }
 
 type HTTPServerConfig struct {
-	Port int `json: port`
+	Port int `json:"port"`
 }
 
 func Load() *Config {
