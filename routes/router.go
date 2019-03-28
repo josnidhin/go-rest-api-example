@@ -10,7 +10,7 @@ import (
 	"github.com/josnidhin/go-rest-api-example/handlers"
 )
 
-func NewRouter() *mux.Router{
+func NewRouter() *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.NotFoundHandler = http.HandlerFunc(handlers.Default404)
