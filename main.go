@@ -36,11 +36,11 @@ func (a *App) Initilise(config *config.Config) {
 	})
 }
 
-func (a *App) Get(path string, fn func(w http.ResponseWriter, r *http.Request)) {
+func (a *App) Get(path string, fn http.HandlerFunc) {
 	a.Router.HandleFunc(path, fn).Methods(http.MethodGet)
 }
 
-func (a *App) Post(path string, fn func(w http.ResponseWriter, r *http.Request)) {
+func (a *App) Post(path string, fn http.HandlerFunc) {
 	a.Router.HandleFunc(path, fn).Methods(http.MethodPost)
 }
 
