@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/josnidhin/go-rest-api-example/config"
-	"github.com/josnidhin/go-rest-api-example/handlers"
+	"github.com/josnidhin/go-rest-api-example/routes"
 )
 
 type App struct {
@@ -29,18 +29,7 @@ func main() {
 }
 
 func (a *App) Initilise(config *config.Config) {
-	a.Router = mux.NewRouter()
-
-	a.Router.NotFoundHandler = http.HandlerFunc(handlers.Default404)
-	a.Get("/", handlers.SayHello)
-}
-
-func (a *App) Get(path string, fn http.HandlerFunc) {
-	a.Router.HandleFunc(path, fn).Methods(http.MethodGet)
-}
-
-func (a *App) Post(path string, fn http.HandlerFunc) {
-	a.Router.HandleFunc(path, fn).Methods(http.MethodPost)
+	a.Router = routes.NewRouter()
 }
 
 func (a *App) Start(config *config.Config) {
