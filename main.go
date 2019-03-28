@@ -23,22 +23,27 @@ func main() {
 	fmt.Println(string(configJson))
 
 	app := &App{}
-	app.Init(config)
+	app.Initilise(config)
+	app.Start(config)
 }
 
-func (app *App)Init(config *config.Config) {
-	app.Router = mux.NewRouter()
+func (a *App) Initilise(config *config.Config) {
+	a.Router = mux.NewRouter()
 
-	app.Get("/", func(w http.ResponseWriter, r *http.Request){
+	a.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("hello"))
 	})
 }
 
-func (app *App)Get(path string, fn func(w http.ResponseWriter, r *http.Request)) {
-	app.Router.HandleFunc(path, fn).Methods(http.MethodGet)
+func (a *App) Get(path string, fn func(w http.ResponseWriter, r *http.Request)) {
+	a.Router.HandleFunc(path, fn).Methods(http.MethodGet)
 }
 
-func (app *App)Post(path string, fn func(w http.ResponseWriter, r *http.Request)) {
-	app.Router.HandleFunc(path, fn).Methods(http.MethodPost)
+func (a *App) Post(path string, fn func(w http.ResponseWriter, r *http.Request)) {
+	a.Router.HandleFunc(path, fn).Methods(http.MethodPost)
+}
+
+func (a *App) Start(config *config.Config) {
+	http.ListenAndServe(fmt.Sprintf(":%d", config.Server.HTTP.Port), a.Router)
 }
