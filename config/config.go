@@ -3,6 +3,8 @@
  */
 package config
 
+import "sync"
+
 type Config struct {
 	Log *LogConfig `json:"log"`
 
@@ -22,16 +24,23 @@ type HTTPServerConfig struct {
 	Port int `json:"port"`
 }
 
-func Load() *Config {
-	return &Config{
-		Log: &LogConfig{
-			Level:       "debug",
-			Development: true,
-		},
-		Server: &ServerConfig{
-			HTTP: &HTTPServerConfig{
-				Port: 8080,
+var instance *Config
+var once sync.Once
+
+func Instance() *Config {
+	once.Do(func() {
+		instance = &Config{
+			Log: &LogConfig{
+				Level:       "debug",
+				Development: true,
 			},
-		},
-	}
+			Server: &ServerConfig{
+				HTTP: &HTTPServerConfig{
+					Port: 8080,
+				},
+			},
+		}
+	})
+
+	return instance
 }

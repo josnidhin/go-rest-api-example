@@ -23,7 +23,7 @@ type App struct {
 
 func main() {
 	app := &App{}
-	app.Config = config.Load()
+	app.Config = config.Instance()
 
 	app.Initilise()
 	app.Start()
