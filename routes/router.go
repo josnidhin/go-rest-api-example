@@ -15,8 +15,10 @@ func NewRouter() *mux.Router {
 
 	router.NotFoundHandler = http.HandlerFunc(handlers.Default404)
 
+	v1Router := router.PathPrefix("/v1").Subrouter()
+
 	for _, route := range routes {
-		router.
+		v1Router.
 			Methods(route.Method).
 			Path(route.Path).
 			HandlerFunc(route.HandlerFunc)
