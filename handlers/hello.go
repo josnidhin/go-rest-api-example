@@ -8,7 +8,7 @@ import (
 )
 
 type customHelloInput struct {
-	Name string `json:"name"`
+	Name string `json:"name" validate:"required"`
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {

@@ -8,7 +8,11 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+
+	"gopkg.in/go-playground/validator.v9"
 )
+
+var validate *validator.Validate
 
 type apiResponse struct {
 	Status int `json:"status"`
@@ -22,6 +26,10 @@ type apiSuccess struct {
 type apiError struct {
 	apiResponse
 	Message string `json:"message"`
+}
+
+func init() {
+	validate = validator.New()
 }
 
 func render(w http.ResponseWriter, status int, data interface{}) {
@@ -53,6 +61,12 @@ func parseJsonRequest(r *http.Request, reqData interface{}) error {
 	}
 
 	err = json.Unmarshal(body, reqData)
+
+	if err != nil {
+		return err
+	}
+
+	err = validate.Struct(reqData)
 
 	if err != nil {
 		return err
