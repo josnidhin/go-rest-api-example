@@ -3,7 +3,7 @@
 #
 PROJECT_NAME := $(shell basename "$(PWD)")
 GO_SRC_FILES := $(shell find . -type f -name '*.go')
-GO_SRC_MAIN := main.go
+GO_SRC_MAIN := $(shell ls *.go)
 
 .PHONY: fmt
 fmt:

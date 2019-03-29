@@ -10,7 +10,8 @@ type Config struct {
 }
 
 type LogConfig struct {
-	Level string `json:"level"`
+	Level       string `json:"level"`
+	Development bool   `json:development`
 }
 
 type ServerConfig struct {
@@ -24,7 +25,8 @@ type HTTPServerConfig struct {
 func Load() *Config {
 	return &Config{
 		Log: &LogConfig{
-			Level: "debug",
+			Level:       "debug",
+			Development: true,
 		},
 		Server: &ServerConfig{
 			HTTP: &HTTPServerConfig{
