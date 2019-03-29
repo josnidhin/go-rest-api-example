@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func NewLogger(appConfig *config.Config) *zap.Logger {
+func Logger(appConfig *config.Config) *zap.Logger {
 	level := logLevel(appConfig)
 
 	logger, err := zap.Config{
