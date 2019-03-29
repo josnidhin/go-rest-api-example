@@ -7,16 +7,16 @@ GO_SRC_MAIN := main.go
 
 .PHONY: fmt
 fmt:
-	@gofmt -l -w $(GO_SRC_FILES)
+	gofmt -l -w $(GO_SRC_FILES)
 
 .PHONY: simplify
 simplify:
-	@gofmt -s -l -w $(GO_SRC_FILES)
+	gofmt -s -l -w $(GO_SRC_FILES)
 
 .PHONY: build
 build:
-	@go build -o $(PROJECT_NAME) $(GO_SRC_MAIN)
+	go build -o $(PROJECT_NAME) $(GO_SRC_MAIN)
 
 .PHONY: clean
 clean:
-	@rm $(PROJECT_NAME)
+	rm -f $(PROJECT_NAME)
