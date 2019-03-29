@@ -14,24 +14,25 @@ import (
 )
 
 type App struct {
+	Config *config.Config
 	Router *mux.Router
 }
 
 func main() {
-	config := config.Load()
+	app := &App{}
+	app.Config = config.Load()
 
-	configJson, _ := json.Marshal(config)
+	configJson, _ := json.Marshal(app.Config)
 	fmt.Println(string(configJson))
 
-	app := &App{}
-	app.Initilise(config)
-	app.Start(config)
+	app.Initilise()
+	app.Start()
 }
 
-func (a *App) Initilise(config *config.Config) {
+func (a *App) Initilise() {
 	a.Router = routes.NewRouter()
 }
 
-func (a *App) Start(config *config.Config) {
-	http.ListenAndServe(fmt.Sprintf(":%d", config.Server.HTTP.Port), a.Router)
+func (a *App) Start() {
+	http.ListenAndServe(fmt.Sprintf(":%d", a.Config.Server.HTTP.Port), a.Router)
 }
