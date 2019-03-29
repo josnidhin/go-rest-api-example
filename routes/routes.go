@@ -20,7 +20,13 @@ type Routes []Route
 var routes = Routes{
 	Route{
 		Method:      "GET",
-		Path:        "/",
-		HandlerFunc: handlers.SayHello,
+		Path:        "/hello",
+		HandlerFunc: handlers.Hello,
+	},
+
+	Route{
+		Method:      "POST",
+		Path:        "/hello",
+		HandlerFunc: handlers.CustomHello,
 	},
 }
