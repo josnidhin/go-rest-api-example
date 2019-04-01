@@ -4,9 +4,9 @@
 package main
 
 import (
-	"github.com/josnidhin/go-rest-api-example/libs"
+	"github.com/josnidhin/go-rest-api-example/system"
 )
 
 func main() {
-	libs.AppInstance()
+	system.AppInstance()
 }
