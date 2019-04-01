@@ -11,7 +11,6 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/josnidhin/go-rest-api-example/config"
-	"github.com/josnidhin/go-rest-api-example/handlers"
 )
 
 func NewRouter() *mux.Router {
@@ -19,7 +18,7 @@ func NewRouter() *mux.Router {
 
 	router.Use(requestLogger)
 
-	router.NotFoundHandler = http.HandlerFunc(handlers.Default404)
+	router.NotFoundHandler = http.HandlerFunc(config.Default404Handler)
 
 	v1Router := router.PathPrefix("/v1").Subrouter()
 
@@ -38,7 +37,7 @@ func requestLogger(next http.Handler) http.Handler {
 		start := time.Now()
 		next.ServeHTTP(w, r)
 
-		AppInstance().Logger.Info(
+		AppLogger().Info(
 			"Request log",
 			zap.String("method", r.Method),
 			zap.String("url", r.RequestURI),

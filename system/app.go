@@ -48,3 +48,7 @@ func AppInstance() *App {
 
 	return app
 }
+
+func AppLogger() *zap.Logger {
+	return app.Logger
+}

@@ -17,6 +17,8 @@ type Route struct {
 
 type Routes []Route
 
+var Default404Handler = handlers.Default404
+
 var AppRoutes = Routes{
 	Route{
 		Method:      "GET",
