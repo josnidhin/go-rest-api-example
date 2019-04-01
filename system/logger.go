@@ -4,6 +4,7 @@
 package system
 
 import (
+	"os"
 	"strings"
 
 	"github.com/josnidhin/go-rest-api-example/config"
@@ -13,11 +14,20 @@ import (
 
 func NewLogger(appConfig *config.Config) *zap.Logger {
 	level := logLevel(appConfig)
+	initFields := map[string]interface{}{
+		"pid": os.Getpid(),
+	}
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		initFields["hostname"] = hostname
+	}
 
 	logger, err := zap.Config{
-		Encoding:    "json",
-		Level:       zap.NewAtomicLevelAt(level),
-		Development: appConfig.Log.Development,
+		Encoding:      "json",
+		Level:         zap.NewAtomicLevelAt(level),
+		Development:   appConfig.Log.Development,
+		InitialFields: initFields,
 		EncoderConfig: zapcore.EncoderConfig{
 			TimeKey:        "ts",
 			LevelKey:       "level",
