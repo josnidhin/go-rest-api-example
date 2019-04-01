@@ -8,5 +8,6 @@ import (
 )
 
 func main() {
-	system.AppInstance()
+	app := system.AppInstance()
+	app.Start()
 }

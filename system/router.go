@@ -5,8 +5,10 @@ package system
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 
 	"github.com/josnidhin/go-rest-api-example/config"
 	"github.com/josnidhin/go-rest-api-example/handlers"
@@ -33,6 +35,16 @@ func NewRouter() *mux.Router {
 
 func requestLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
 		next.ServeHTTP(w, r)
+
+		AppInstance().Logger.Info(
+			"Request log",
+			zap.String("method", r.Method),
+			zap.String("url", r.RequestURI),
+			zap.String("userAgent", r.Header.Get("User-Agent")),
+			zap.String("httpVersion", r.Proto),
+			zap.Duration("requestDuration", time.Since(start)),
+		)
 	})
 }

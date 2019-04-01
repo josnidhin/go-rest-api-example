@@ -44,7 +44,6 @@ func AppInstance() *App {
 		app.Config = config.Instance()
 
 		app.Initilise()
-		app.Start()
 	})
 
 	return app
