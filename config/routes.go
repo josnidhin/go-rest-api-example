@@ -1,7 +1,7 @@
 /**
  * @author Jose Nidhin
  */
-package routes
+package config
 
 import (
 	"net/http"
@@ -17,7 +17,7 @@ type Route struct {
 
 type Routes []Route
 
-var routes = Routes{
+var AppRoutes = Routes{
 	Route{
 		Method:      "GET",
 		Path:        "/hello",

@@ -12,7 +12,6 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/josnidhin/go-rest-api-example/config"
-	"github.com/josnidhin/go-rest-api-example/routes"
 )
 
 var app *App
@@ -26,7 +25,7 @@ type App struct {
 
 func (a *App) Initilise() {
 	a.Logger = NewLogger(a.Config)
-	a.Router = routes.NewRouter()
+	a.Router = NewRouter()
 }
 
 func (a *App) Start() {
