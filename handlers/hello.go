@@ -21,7 +21,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func CustomHello(w http.ResponseWriter, r *http.Request) {
-	getLogger().Debug("PUT /hello")
+	getLogger().Debug("POST /hello")
 	reqData := &customHelloInput{}
 	err := parseJsonRequest(r, reqData)
 
