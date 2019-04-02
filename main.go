@@ -19,7 +19,7 @@ func main() {
 	app.Config = system.ConfigInstance()
 	app.Logger = system.NewLogger(app.Config)
 
-	handlers.SetApp(app)
+	handlers.New(app)
 	app.Router = system.NewRouter(Routes(), handlers.Default404)
 
 	serverAddress := fmt.Sprintf(":%d", app.Config.Server.HTTP.Port)
