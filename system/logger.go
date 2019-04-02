@@ -4,15 +4,18 @@
 package system
 
 import (
+	"net/http"
 	"os"
 	"strings"
+	"time"
 
-	"github.com/josnidhin/go-rest-api-example/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func NewLogger(appConfig *config.Config) *zap.Logger {
+var logger *zap.Logger
+
+func NewLogger(appConfig *Config) *zap.Logger {
 	level := logLevel(appConfig)
 	initFields := map[string]interface{}{
 		"pid": os.Getpid(),
@@ -23,7 +26,7 @@ func NewLogger(appConfig *config.Config) *zap.Logger {
 		initFields["hostname"] = hostname
 	}
 
-	logger, err := zap.Config{
+	logger, err = zap.Config{
 		Encoding:      "json",
 		Level:         zap.NewAtomicLevelAt(level),
 		Development:   appConfig.Log.Development,
@@ -54,7 +57,23 @@ func NewLogger(appConfig *config.Config) *zap.Logger {
 	return logger
 }
 
-func logLevel(appConfig *config.Config) zapcore.Level {
+func RequestLogger(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		next.ServeHTTP(w, r)
+
+		logger.Info(
+			"Request log",
+			zap.String("method", r.Method),
+			zap.String("url", r.RequestURI),
+			zap.String("userAgent", r.Header.Get("User-Agent")),
+			zap.String("httpVersion", r.Proto),
+			zap.Duration("requestDuration", time.Since(start)),
+		)
+	})
+}
+
+func logLevel(appConfig *Config) zapcore.Level {
 	switch strings.ToLower(appConfig.Log.Level) {
 	case "debug":
 		return zap.DebugLevel

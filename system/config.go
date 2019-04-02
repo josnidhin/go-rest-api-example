@@ -1,7 +1,7 @@
 /**
  * @author Jose Nidhin
  */
-package config
+package system
 
 import "sync"
 
@@ -27,7 +27,7 @@ type HTTPServerConfig struct {
 var instance *Config
 var once sync.Once
 
-func Instance() *Config {
+func ConfigInstance() *Config {
 	once.Do(func() {
 		instance = &Config{
 			Log: &LogConfig{

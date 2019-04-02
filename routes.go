@@ -1,34 +1,27 @@
 /**
  * @author Jose Nidhin
  */
-package config
+package main
 
 import (
-	"net/http"
-
 	"github.com/josnidhin/go-rest-api-example/handlers"
+	"github.com/josnidhin/go-rest-api-example/system"
 )
 
-type Route struct {
-	Method      string
-	Path        string
-	HandlerFunc http.HandlerFunc
-}
-
-type Routes []Route
-
-var Default404Handler = handlers.Default404
-
-var AppRoutes = Routes{
-	Route{
+var routes = system.Routes{
+	system.Route{
 		Method:      "GET",
 		Path:        "/hello",
 		HandlerFunc: handlers.Hello,
 	},
 
-	Route{
+	system.Route{
 		Method:      "POST",
 		Path:        "/hello",
 		HandlerFunc: handlers.CustomHello,
 	},
+}
+
+func Routes() system.Routes {
+	return routes
 }

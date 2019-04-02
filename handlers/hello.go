@@ -12,6 +12,7 @@ type customHelloInput struct {
 }
 
 func Hello(w http.ResponseWriter, r *http.Request) {
+	getLogger().Debug("GET /hello")
 	res := &apiSuccess{}
 	res.Status = http.StatusOK
 	res.Data = []string{"hello", "world"}
@@ -20,6 +21,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 }
 
 func CustomHello(w http.ResponseWriter, r *http.Request) {
+	getLogger().Debug("PUT /hello")
 	reqData := &customHelloInput{}
 	err := parseJsonRequest(r, reqData)
 
