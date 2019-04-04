@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"go.uber.org/zap"
@@ -14,45 +15,48 @@ import (
 )
 
 var logger *zap.Logger
+var loggerOnce sync.Once
 
-func NewLogger(appConfig *Config) *zap.Logger {
-	level := logLevel(appConfig)
-	initFields := map[string]interface{}{
-		"pid": os.Getpid(),
-	}
+func LoggerInstance(appConfig *Config) *zap.Logger {
+	loggerOnce.Do(func() {
+		level := logLevel(appConfig)
+		initFields := map[string]interface{}{
+			"pid": os.Getpid(),
+		}
 
-	hostname, err := os.Hostname()
-	if err != nil {
-		initFields["hostname"] = hostname
-	}
+		hostname, err := os.Hostname()
+		if err != nil {
+			initFields["hostname"] = hostname
+		}
 
-	logger, err = zap.Config{
-		Encoding:      "json",
-		Level:         zap.NewAtomicLevelAt(level),
-		Development:   appConfig.Log.Development,
-		InitialFields: initFields,
-		EncoderConfig: zapcore.EncoderConfig{
-			TimeKey:        "ts",
-			LevelKey:       "level",
-			NameKey:        "logger",
-			CallerKey:      "caller",
-			MessageKey:     "msg",
-			StacktraceKey:  "stacktrace",
-			LineEnding:     zapcore.DefaultLineEnding,
-			EncodeLevel:    zapcore.LowercaseLevelEncoder,
-			EncodeTime:     zapcore.ISO8601TimeEncoder,
-			EncodeDuration: zapcore.SecondsDurationEncoder,
-			EncodeCaller:   zapcore.ShortCallerEncoder,
-		},
-		OutputPaths:      []string{"stdout"},
-		ErrorOutputPaths: []string{"stdout"},
-	}.Build()
+		logger, err = zap.Config{
+			Encoding:      "json",
+			Level:         zap.NewAtomicLevelAt(level),
+			Development:   appConfig.Log.Development,
+			InitialFields: initFields,
+			EncoderConfig: zapcore.EncoderConfig{
+				TimeKey:        "ts",
+				LevelKey:       "level",
+				NameKey:        "logger",
+				CallerKey:      "caller",
+				MessageKey:     "msg",
+				StacktraceKey:  "stacktrace",
+				LineEnding:     zapcore.DefaultLineEnding,
+				EncodeLevel:    zapcore.LowercaseLevelEncoder,
+				EncodeTime:     zapcore.ISO8601TimeEncoder,
+				EncodeDuration: zapcore.SecondsDurationEncoder,
+				EncodeCaller:   zapcore.ShortCallerEncoder,
+			},
+			OutputPaths:      []string{"stdout"},
+			ErrorOutputPaths: []string{"stdout"},
+		}.Build()
 
-	if err != nil {
-		panic(err)
-	}
+		if err != nil {
+			panic(err)
+		}
 
-	logger.Debug("Logger initialised")
+		logger.Debug("Logger initialised")
+	})
 
 	return logger
 }

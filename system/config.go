@@ -25,10 +25,10 @@ type HTTPServerConfig struct {
 }
 
 var instance *Config
-var once sync.Once
+var configOnce sync.Once
 
 func ConfigInstance() *Config {
-	once.Do(func() {
+	configOnce.Do(func() {
 		instance = &Config{
 			Log: &LogConfig{
 				Level:       "debug",
