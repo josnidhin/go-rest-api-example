@@ -3,12 +3,17 @@
  */
 package system
 
-import "sync"
+import (
+	"os"
+	"sync"
+)
 
 type Config struct {
 	Log *LogConfig `json:"log"`
 
 	Server *ServerConfig `json:"server"`
+
+	Database *DatabaseConfig `json:"database"`
 }
 
 type LogConfig struct {
@@ -24,6 +29,22 @@ type HTTPServerConfig struct {
 	Port int `json:"port"`
 }
 
+type DatabaseConfig struct {
+	PG *PGConfigs `json:"pg"`
+}
+
+type PGConfigs struct {
+	Default *PGConfig `json:"default"`
+}
+
+type PGConfig struct {
+	Host     string `json:"host"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Port     string `json:"port"`
+	Database string `json:"database"`
+}
+
 var instance *Config
 var configOnce sync.Once
 
@@ -37,6 +58,17 @@ func ConfigInstance() *Config {
 			Server: &ServerConfig{
 				HTTP: &HTTPServerConfig{
 					Port: 8080,
+				},
+			},
+			Database: &DatabaseConfig{
+				PG: &PGConfigs{
+					Default: &PGConfig{
+						Host:     os.Getenv("PG_DEFAULT_HOST"),
+						User:     os.Getenv("PG_DEFAULT_USER"),
+						Password: os.Getenv("PG_DEFAULT_PASSWORD"),
+						Port:     os.Getenv("PG_DEFAULT_PORT"),
+						Database: os.Getenv("PG_DEFAULT_DB"),
+					},
 				},
 			},
 		}
