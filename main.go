@@ -18,6 +18,10 @@ import (
 	"github.com/josnidhin/go-rest-api-example/system"
 )
 
+const (
+	ShutdownTimeout = 10 * time.Second
+)
+
 func main() {
 	app := &system.App{}
 	server := &http.Server{}
@@ -32,7 +36,7 @@ func main() {
 
 		app.Logger.Info("Graceful shutdown initialised")
 
-		ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+		ctx, _ := context.WithTimeout(context.Background(), ShutdownTimeout)
 
 		if err := server.Shutdown(ctx); err != nil {
 			app.Logger.Error("Server shutdown error", zap.Error(err))
