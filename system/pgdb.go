@@ -4,16 +4,28 @@
 package system
 
 import (
+	"context"
 	"database/sql"
 	"strings"
+	"time"
 
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
+func NewPGDB(appConfig *Config) *sql.DB {
+	db, err := sql.Open("postgres", pgConnStr(appConfig.Database.PG.Default))
+	if err != nil {
+		panic(err)
+	}
 
-func NewPGDB(appConfig *Config) {
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 
+	if err := db.PingContext(ctx); err != nil {
+		panic(err)
+	}
+
+	return db
 }
 
 func pgConnStr(pgConfig *PGConfig) string {
@@ -28,9 +40,9 @@ func pgConnStr(pgConfig *PGConfig) string {
 	return connStr.String()
 }
 
-func pgConnStrPart(key, val string) {
+func pgConnStrPart(key, val string) string {
 	if val != "" {
-		return key + "=" val + " "
+		return key + "=" + val + " "
 	}
 	return ""
 }

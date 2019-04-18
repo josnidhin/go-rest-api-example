@@ -47,6 +47,7 @@ func main() {
 
 	app.Config = system.ConfigInstance()
 	app.Logger = system.LoggerInstance(app.Config)
+	app.DB = system.NewPGDB(app.Config)
 
 	handlers.New(app)
 	app.Router = system.NewRouter(Routes(), handlers.Default404)

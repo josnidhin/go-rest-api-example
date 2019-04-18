@@ -42,7 +42,7 @@ type PGConfig struct {
 	User     string `json:"user"`
 	Password string `json:"password"`
 	Port     string `json:"port"`
-	DBName string `json:"dbname"`
+	DBName   string `json:"dbname"`
 }
 
 var instance *Config
@@ -67,7 +67,7 @@ func ConfigInstance() *Config {
 						User:     os.Getenv("PG_DEFAULT_USER"),
 						Password: os.Getenv("PG_DEFAULT_PASSWORD"),
 						Port:     os.Getenv("PG_DEFAULT_PORT"),
-						DBName: os.Getenv("PG_DEFAULT_DBNAME"),
+						DBName:   os.Getenv("PG_DEFAULT_DBNAME"),
 					},
 				},
 			},
