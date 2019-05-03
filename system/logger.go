@@ -6,6 +6,7 @@ package system
 import (
 	"net/http"
 	"os"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -17,10 +18,12 @@ import (
 var logger *zap.Logger
 var loggerOnce sync.Once
 
-func LoggerInstance(appConfig *Config) *zap.Logger {
+func LoggerInstance(appConfig *Config, appVersion string) *zap.Logger {
 	loggerOnce.Do(func() {
 		level := logLevel(appConfig)
 		initFields := map[string]interface{}{
+			"appVersion": appVersion,
+			"goVersion": runtime.Version(),
 			"pid": os.Getpid(),
 		}
 

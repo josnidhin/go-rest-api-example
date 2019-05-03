@@ -22,6 +22,8 @@ const (
 	ShutdownTimeout = 10 * time.Second
 )
 
+var Version string
+
 func main() {
 	app := &system.App{}
 	server := &http.Server{}
@@ -46,7 +48,7 @@ func main() {
 	}()
 
 	app.Config = system.ConfigInstance()
-	app.Logger = system.LoggerInstance(app.Config)
+	app.Logger = system.LoggerInstance(app.Config, Version)
 	app.DB = system.NewPGDB(app.Config)
 
 	handlers.New(app)
