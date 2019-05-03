@@ -36,6 +36,7 @@ func pgConnStr(pgConfig *PGConfig) string {
 	connStr.WriteString(pgConnStrPart("password", pgConfig.Password))
 	connStr.WriteString(pgConnStrPart("port", pgConfig.Port))
 	connStr.WriteString(pgConnStrPart("dbname", pgConfig.DBName))
+	connStr.WriteString(pgConnStrPart("sslmode", pgConfig.SSLMode))
 
 	return connStr.String()
 }

@@ -43,6 +43,7 @@ type PGConfig struct {
 	Password string `json:"password"`
 	Port     string `json:"port"`
 	DBName   string `json:"dbname"`
+	SSLMode  string `json:"sslMode"`
 }
 
 var instance *Config
@@ -68,6 +69,7 @@ func ConfigInstance() *Config {
 						Password: os.Getenv("PG_DEFAULT_PASSWORD"),
 						Port:     os.Getenv("PG_DEFAULT_PORT"),
 						DBName:   os.Getenv("PG_DEFAULT_DBNAME"),
+						SSLMode:  "disable",
 					},
 				},
 			},
