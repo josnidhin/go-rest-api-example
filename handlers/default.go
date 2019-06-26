@@ -10,6 +10,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 
 	"github.com/josnidhin/go-rest-api-example/system"
+	"github.com/josnidhin/go-rest-api-example/system/config"
 )
 
 var app *system.App
@@ -26,7 +27,7 @@ func Default404(w http.ResponseWriter, r *http.Request) {
 	renderError(w, http.StatusNotFound, res)
 }
 
-func getConfig() *system.Config {
+func getConfig() *config.Config {
 	return app.Config
 }
 

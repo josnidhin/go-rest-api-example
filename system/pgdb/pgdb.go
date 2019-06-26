@@ -1,7 +1,7 @@
 /**
  * @author Jose Nidhin
  */
-package system
+package pgdb
 
 import (
 	"context"
@@ -12,8 +12,19 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func NewPGDB(appConfig *Config) *sql.DB {
-	db, err := sql.Open("postgres", pgConnStr(appConfig.Database.PG.Default))
+//
+type PGConfig struct {
+	Host     string `json:"host"`
+	User     string `json:"user"`
+	Password string `json:"password"`
+	Port     string `json:"port"`
+	DBName   string `json:"dbname"`
+	SSLMode  string `json:"sslMode"`
+}
+
+//
+func New(pgConfig *PGConfig) *sql.DB {
+	db, err := sql.Open("postgres", pgConnStr(pgConfig))
 	if err != nil {
 		panic(err)
 	}
@@ -28,6 +39,7 @@ func NewPGDB(appConfig *Config) *sql.DB {
 	return db
 }
 
+//
 func pgConnStr(pgConfig *PGConfig) string {
 	var connStr strings.Builder
 
@@ -41,6 +53,7 @@ func pgConnStr(pgConfig *PGConfig) string {
 	return connStr.String()
 }
 
+//
 func pgConnStrPart(key, val string) string {
 	if val != "" {
 		return key + "=" + val + " "

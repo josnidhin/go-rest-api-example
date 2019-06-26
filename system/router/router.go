@@ -1,25 +1,29 @@
 /**
  * @author Jose Nidhin
  */
-package system
+package router
 
 import (
-	"github.com/go-chi/chi"
 	"net/http"
+
+	"github.com/go-chi/chi"
 )
 
+//
 type Route struct {
 	Method      string
 	Path        string
 	HandlerFunc http.HandlerFunc
 }
 
+//
 type Routes []Route
 
-func NewRouter(routes Routes, notFoundHandler http.HandlerFunc) *chi.Mux {
+//
+func New(routes Routes, notFoundHandler http.HandlerFunc) *chi.Mux {
 	router := chi.NewRouter()
 
-	router.Use(RequestLogger)
+	//router.Use(RequestLogger)
 
 	router.NotFound(notFoundHandler)
 

@@ -6,12 +6,16 @@ package system
 import (
 	"database/sql"
 
-	"github.com/go-chi/chi"
 	"go.uber.org/zap"
+
+	"github.com/go-chi/chi"
+
+	"github.com/josnidhin/go-rest-api-example/system/config"
 )
 
+//
 type App struct {
-	Config *Config
+	Config *config.Config
 	Logger *zap.Logger
 	DB     *sql.DB
 	Router *chi.Mux

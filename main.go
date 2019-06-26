@@ -14,15 +14,19 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/josnidhin/go-rest-api-example/handlers"
+	//"github.com/josnidhin/go-rest-api-example/handlers"
 	"github.com/josnidhin/go-rest-api-example/system"
+	"github.com/josnidhin/go-rest-api-example/system/config"
+	"github.com/josnidhin/go-rest-api-example/system/logger"
+	"github.com/josnidhin/go-rest-api-example/system/pgdb"
+	//"github.com/josnidhin/go-rest-api-example/system/router"
 )
 
 const (
 	ShutdownTimeout = 10 * time.Second
 )
 
-var Version string
+var AppName, AppVersion string
 
 func main() {
 	app := &system.App{}
@@ -38,7 +42,8 @@ func main() {
 
 		app.Logger.Info("Graceful shutdown initialised")
 
-		ctx, _ := context.WithTimeout(context.Background(), ShutdownTimeout)
+		ctx, cancel := context.WithTimeout(context.Background(), ShutdownTimeout)
+		defer cancel()
 
 		if err := server.Shutdown(ctx); err != nil {
 			app.Logger.Error("Server shutdown error", zap.Error(err))
@@ -47,17 +52,21 @@ func main() {
 		close(idleConnClosed)
 	}()
 
-	app.Config = system.ConfigInstance()
-	app.Logger = system.LoggerInstance(app.Config, Version)
-	app.DB = system.NewPGDB(app.Config)
+	app.Config = config.New()
+	app.Config.Log.AppName = AppName
+	app.Config.Log.AppName = AppVersion
 
-	handlers.New(app)
-	app.Router = system.NewRouter(Routes(), handlers.Default404)
+	app.Logger = logger.New(app.Config.Log)
+
+	app.DB = pgdb.New(app.Config.PG)
+
+	//handlers.New(app)
+	//app.Router = system.NewRouter(Routes(), handlers.Default404)
 
 	serverAddress := fmt.Sprintf(":%d", app.Config.Server.HTTP.Port)
 
 	server.Addr = serverAddress
-	server.Handler = app.Router
+	//server.Handler = app.Router
 
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
 		app.Logger.Fatal("Server startup failed", zap.Error(err))

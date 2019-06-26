@@ -5,23 +5,25 @@ package main
 
 import (
 	"github.com/josnidhin/go-rest-api-example/handlers"
-	"github.com/josnidhin/go-rest-api-example/system"
+	"github.com/josnidhin/go-rest-api-example/system/router"
 )
 
-var routes = system.Routes{
-	system.Route{
+//
+var routes = router.Routes{
+	router.Route{
 		Method:      "GET",
 		Path:        "/hello",
 		HandlerFunc: handlers.Hello,
 	},
 
-	system.Route{
+	router.Route{
 		Method:      "POST",
 		Path:        "/hello",
 		HandlerFunc: handlers.CustomHello,
 	},
 }
 
-func Routes() system.Routes {
+//
+func Routes() router.Routes {
 	return routes
 }

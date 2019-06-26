@@ -6,7 +6,11 @@ PROJECT_NAME := $(shell basename "$(PWD)")
 GO_SRC_FILES := $(shell find . -type f -name '*.go')
 GO_SRC_MAIN := $(shell ls *.go)
 
-LDFLAGS=-ldflags "-X=main.Version=$(VERSION)"
+LDFLAGS=-ldflags "-X=main.AppVersion=$(VERSION) -X=main.AppName=$(PROJECT_NAME)"
+
+.PHONY: vet
+vet:
+	go vet ./...
 
 .PHONY: fmt
 fmt:
@@ -16,10 +20,14 @@ fmt:
 simplify:
 	gofmt -s -l -w $(GO_SRC_FILES)
 
-.PHONY: build
-build:
-	go build $(LDFLAGS) -o $(PROJECT_NAME) $(GO_SRC_MAIN)
+.PHONY: tidy
+tidy:
+	go mod tidy
 
 .PHONY: clean
 clean:
-	rm -f $(PROJECT_NAME)
+	go clean -x
+
+.PHONY: build
+build:
+	go build -i -v -o $(PROJECT_NAME) $(LDFLAGS) $(GO_SRC_MAIN)
