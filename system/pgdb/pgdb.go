@@ -5,10 +5,10 @@ package pgdb
 
 import (
 	"context"
-	"database/sql"
 	"strings"
 	"time"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
@@ -23,20 +23,18 @@ type PGConfig struct {
 }
 
 //
-func New(pgConfig *PGConfig) *sql.DB {
-	db, err := sql.Open("postgres", pgConnStr(pgConfig))
-	if err != nil {
-		panic(err)
-	}
+func New(pgConfig *PGConfig) (db *sqlx.DB) {
+	connStr := pgConnStr(pgConfig)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	if err := db.PingContext(ctx); err != nil {
+	db, err := sqlx.ConnectContext(ctx, "postgres", connStr)
+	if err != nil {
 		panic(err)
 	}
 
-	return db
+	return
 }
 
 //
