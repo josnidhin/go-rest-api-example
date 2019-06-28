@@ -33,30 +33,13 @@ func main() {
 	server := &http.Server{}
 	idleConnClosed := make(chan struct{})
 
-	go func() {
-		sigChan := make(chan os.Signal, 1)
-		signal.Notify(sigChan, os.Interrupt)
-		signal.Notify(sigChan, syscall.SIGTERM)
-
-		<-sigChan
-
-		app.Logger.Info("Graceful shutdown initialised")
-
-		ctx, cancel := context.WithTimeout(context.Background(), ShutdownTimeout)
-		defer cancel()
-
-		if err := server.Shutdown(ctx); err != nil {
-			app.Logger.Error("Server shutdown error", zap.Error(err))
-		}
-
-		close(idleConnClosed)
-	}()
-
 	app.Config = config.New()
 	app.Config.Log.AppName = AppName
-	app.Config.Log.AppName = AppVersion
+	app.Config.Log.AppVersion = AppVersion
 
 	app.Logger = logger.New(app.Config.Log)
+
+	go signalHandler(server, idleConnClosed, app.Logger)
 
 	app.DB = pgdb.New(app.Config.PG)
 
@@ -73,4 +56,33 @@ func main() {
 	}
 
 	<-idleConnClosed
+}
+
+//
+func signalHandler(server *http.Server, idleConnClosed chan struct{},
+	logger *zap.Logger) {
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt)
+	signal.Notify(sigChan, syscall.SIGTERM)
+
+	<-sigChan
+
+	logger.Info("Graceful shutdown initialised")
+
+	ctx, cancel := context.WithTimeout(context.Background(), ShutdownTimeout)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		logger.Error("Server shutdown error", zap.Error(err))
+	}
+
+	shutdownHandler(logger)
+
+	close(idleConnClosed)
+}
+
+//
+func shutdownHandler(logger *zap.Logger) {
+	logger.Info("Shutdown Handler called")
 }
