@@ -12,7 +12,6 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-//
 type LogConfig struct {
 	AppName, AppVersion string
 
@@ -20,7 +19,6 @@ type LogConfig struct {
 	Development bool   `json:"development"`
 }
 
-//
 func New(logConfig *LogConfig) *zap.Logger {
 	level := logLevel(logConfig.Level)
 
@@ -84,7 +82,6 @@ func New(logConfig *LogConfig) *zap.Logger {
 //	})
 //}
 
-//
 func logLevel(level string) zapcore.Level {
 	switch strings.ToLower(level) {
 	case "debug":

@@ -6,20 +6,17 @@ package router
 import (
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
-//
 type Route struct {
 	Method      string
 	Path        string
 	HandlerFunc http.HandlerFunc
 }
 
-//
 type Routes []Route
 
-//
 func New(routes Routes, notFoundHandler http.HandlerFunc) *chi.Mux {
 	router := chi.NewRouter()
 

@@ -10,7 +10,6 @@ import (
 	"github.com/josnidhin/go-rest-api-example/system/pgdb"
 )
 
-//
 type Config struct {
 	Log *logger.LogConfig `json:"log"`
 
@@ -19,17 +18,14 @@ type Config struct {
 	PG *pgdb.PGConfig `json:"pg"`
 }
 
-//
 type ServerConfig struct {
 	HTTP *HTTPServerConfig `json:"http"`
 }
 
-//
 type HTTPServerConfig struct {
 	Port int `json:"port"`
 }
 
-//
 func New() *Config {
 	config := &Config{
 		Log: &logger.LogConfig{

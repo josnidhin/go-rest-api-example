@@ -58,7 +58,6 @@ func main() {
 	<-idleConnClosed
 }
 
-//
 func signalHandler(server *http.Server, idleConnClosed chan struct{},
 	logger *zap.Logger) {
 
@@ -82,7 +81,6 @@ func signalHandler(server *http.Server, idleConnClosed chan struct{},
 	close(idleConnClosed)
 }
 
-//
 func shutdownHandler(logger *zap.Logger) {
 	logger.Info("Shutdown Handler called")
 }

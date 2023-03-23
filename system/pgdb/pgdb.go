@@ -12,7 +12,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-//
 type PGConfig struct {
 	Host     string `json:"host"`
 	User     string `json:"user"`
@@ -22,7 +21,6 @@ type PGConfig struct {
 	SSLMode  string `json:"sslMode"`
 }
 
-//
 func New(pgConfig *PGConfig) (db *sqlx.DB) {
 	connStr := pgConnStr(pgConfig)
 
@@ -37,7 +35,6 @@ func New(pgConfig *PGConfig) (db *sqlx.DB) {
 	return
 }
 
-//
 func pgConnStr(pgConfig *PGConfig) string {
 	var connStr strings.Builder
 
@@ -51,7 +48,6 @@ func pgConnStr(pgConfig *PGConfig) string {
 	return connStr.String()
 }
 
-//
 func pgConnStrPart(key, val string) string {
 	if val != "" {
 		return key + "=" + val + " "

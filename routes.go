@@ -8,7 +8,6 @@ import (
 	"github.com/josnidhin/go-rest-api-example/system/router"
 )
 
-//
 var routes = router.Routes{
 	router.Route{
 		Method:      "GET",
@@ -23,7 +22,6 @@ var routes = router.Routes{
 	},
 }
 
-//
 func Routes() router.Routes {
 	return routes
 }
